@@ -12,6 +12,16 @@ class ImageReader(object):
         '''
         Constructor
         '''
-    
+
     def readImages(self, foregroundImageAddress, foregroundColorToRemove, backgroundImageAddress):
-        im = Image.open(foregroundImageAddress)
+        foreground = Image.open(foregroundImageAddress, 'r')
+        background = Image.open(backgroundImageAddress, 'r')
+        newImage = Image.composite(foreground, background)
+        test = Image.new()
+        test.paste(newImage)
+        test.save("output.png")
+        
+    def removeColor(self, image, colorToRemove):
+        '''
+        Code goes here
+        '''

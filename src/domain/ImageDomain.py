@@ -6,7 +6,7 @@ Created on 06/04/2012
 
 from array import array
 
-class Image(object):
+class ImageDomain(object):
 
     def __init__(self, width, height):
         self.width  = width
