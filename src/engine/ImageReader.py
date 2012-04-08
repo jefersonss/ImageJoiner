@@ -18,11 +18,17 @@ class ImageReader(object):
         foreground = Image.open(foregroundImageAddress, 'r')
         background = Image.open(backgroundImageAddress, 'r')
         fgImage, bgImage = self.populateImages(foreground, background)
-        self.removeColor(fgImage, fgImage.getPixel(0, 0))
+        self.removeColor(fgImage, (0, 0, 0))
         img = Image.new(foreground.mode, foreground.size)
+        img = self.fillNewImage(foreground, foreground.load(), foreground.size)
+        img.save('output.jpg')
         
-    def fillNewImage(self, imageToFill, pixels):
-        imageToFill.putpixel()
+    def fillNewImage(self, imageToFill, pixels, imageSize):
+        for h in range(0, imageSize[0]):
+            for w in range(0, imageSize[1]):
+                imageToFill.putpixel((h, w), pixels[h, w])
+        
+        return imageToFill
     
     def populateImages(self, foreground, background):
         fgWidth, fgHeight = foreground.size
