@@ -18,7 +18,7 @@ class ImageReader(object):
         foreground = Image.open(foregroundImageAddress, 'r')
         background = Image.open(backgroundImageAddress, 'r')
         fgImage, bgImage = self.populateImages(foreground, background)
-        self.removeColor(fgImage, (0, 0, 0))
+        self.removeColor(fgImage.load(), (0, 0, 0))
         img = Image.new(foreground.mode, foreground.size)
         img = self.fillNewImage(foreground, foreground.load(), foreground.size)
         img.save('output.jpg')
@@ -49,8 +49,8 @@ class ImageReader(object):
         
         return domainImage
     
-    def removeColor(self, image, colorToRemove):
-        for w in range(0, image.getWidth()):
-            for h in range(0, image.getHeight()):
-                if(image.getPixel(h, w) == colorToRemove):
-                    image.setPixel((0, 0, 0), w, h)
+    def removeColor(self, imagePixels, colorToRemove):
+        for w in range(imagePixels[0]):
+            for h in range(imagePixels[1]):
+                if imagePixels[w, h] == (255, 255, 255, 255):
+                    imagePixels[w, h] = (255, 255, 255, 0)
