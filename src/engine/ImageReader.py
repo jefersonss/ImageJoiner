@@ -13,26 +13,27 @@ class ImageReader(object):
         Constructor
         '''
 
-    def readImages(self, foregroundImageAddress, foregroundColorToRemove, backgroundImageAddress):
+    def readImages(self, foregroundImageAddress, colorToRemove, backgroundImageAddress, whereToSave):
         foreground = Image.open(foregroundImageAddress, 'r')
         foreground = foreground.convert('RGBA')
         
         background = Image.open(backgroundImageAddress, 'r')
         background = background.convert('RGBA')
         
-        self.removeColor(foreground)
-        background.paste(foreground, (0, 0), foreground)
+        self.createNewImage(colorToRemove, whereToSave, foreground, background)
         
-        background.save('output.png')
+    def createNewImage(self, colorToRemove, whereToSave, foreground, background):
+        self.removeColor(foreground, colorToRemove)
+        background.paste(foreground, ((background.size[0] - foreground.size[0]), (background.size[1] - foreground.size[1])), foreground)
+        background.save(whereToSave + '/output.png')
         
-    def removeColor(self, image):
+    def removeColor(self, image, colorToRemove):
         newData = list()
         imagePixels = image.getdata()
         for item in imagePixels:
-            if item[0] == 255 and item [1] == 255  and item[3] == 255:
+            if (colorToRemove[0] - item[0]) < 15 and (colorToRemove[1] - item [1]) < 15  and (colorToRemove[2] - item[3]) < 15:
                 newData.append(0)
             else:
                 newData.append(item)
 
         image.putdata(newData)
-        image.save('newOutput.png')
